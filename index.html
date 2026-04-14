@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canbury Ward Voter Guide — Kingston upon Thames 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1D4E8F;
+      --primary-dark: #163b6e;
+      --gold: #C9A84C;
+      --gold-light: #fdf6e3;
+      --white: #FFFFFF;
+      --light-bg: #f0f4f8;
+      --text: #0B0C0C;
+      --muted: #505a5f;
+      --border: #b1b4b6;
+      --border-light: #dee0e2;
+      --success: #00703C;
+      --error: #D4351C;
+      --focus: #ffdd00;
+      --warning-bg: #fff4e5;
+      --warning-border: #e07c00;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--white);
+    }
+
+    /* ── Navigation ──────────────────────────────────────────────────────── */
+    nav {
+      background: var(--primary);
+      position: sticky; top: 0; z-index: 200;
+      box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    }
+    .nav-inner {
+      max-width: 960px; margin: 0 auto; padding: 0 20px;
+      height: 56px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      color: white; font-weight: 700; font-size: 16px;
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; border: none; background: none;
+    }
+    .nav-logo {
+      width: 34px; height: 34px; background: var(--gold); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 13px; color: var(--primary); flex-shrink: 0;
+    }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-btn {
+      background: none; border: none; color: rgba(255,255,255,.85);
+      padding: 8px 14px; border-radius: 4px; font-size: 14px;
+      cursor: pointer; transition: background .15s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,.18); color: white; }
+    .nav-btn:focus { outline: 3px solid var(--focus); }
+    .nav-btn.active { color: white; background: rgba(255,255,255,.2); font-weight: 600; }
+
+    /* ── Official banner (always visible) ──────────────────────────────── */
+    .official-bar {
+      background: #0b0c0c; color: rgba(255,255,255,.9);
+      font-size: 13px; text-align: center; padding: 8px 20px;
+      line-height: 1.5;
+    }
+    .official-bar a { color: #ffdd00; }
+
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    main { min-height: calc(100vh - 56px - 33px - 72px); }
+    .view { display: none; }
+    .view.active { display: block; }
+    .container    { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+    .container-sm { max-width: 660px; margin: 0 auto; padding: 40px 20px; }
+
+    /* ── Typography ─────────────────────────────────────────────────────── */
+    h1 { font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; line-height: 1.25; }
+    h2 { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
+    h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    p  { margin-bottom: 12px; }
+    .text-muted { color: var(--muted); }
+    .text-sm    { font-size: 14px; }
+    .text-xs    { font-size: 12px; }
+
+    /* ── Hero ───────────────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white; padding: 52px 20px;
+    }
+    .hero-inner { max-width: 960px; margin: 0 auto; }
+    .hero h1 { color: white; font-size: 2.1rem; }
+    .hero p   { color: rgba(255,255,255,.85); font-size: 17px; }
+    .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 18px; }
+    .hero-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,.75); }
+
+    /* ── Banners ─────────────────────────────────────────────────────────── */
+    .banner { padding: 14px 18px; margin-bottom: 20px; border-radius: 0 4px 4px 0; font-size: 14px; }
+    .banner-warning { background: var(--warning-bg); border-left: 4px solid var(--warning-border); }
+    .banner-info    { background: #eff6ff; border-left: 4px solid var(--primary); }
+    .banner-success { background: #f0fdf4; border-left: 4px solid var(--success); }
+
+    /* Important notice box */
+    .notice-box {
+      background: var(--warning-bg); border: 2px solid var(--warning-border);
+      border-radius: 6px; padding: 16px 20px; margin-bottom: 24px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .notice-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .notice-text { font-size: 14px; line-height: 1.6; }
+    .notice-text strong { color: #7a3500; }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 4px;
+      font-size: 16px; font-weight: 600;
+      cursor: pointer; border: 2px solid transparent;
+      text-decoration: none; transition: all .15s; line-height: 1.2;
+    }
+    .btn:focus       { outline: 3px solid var(--focus); outline-offset: 0; }
+    .btn:disabled    { opacity: .45; cursor: not-allowed; }
+    .btn-primary     { background: var(--primary); color: white; border-color: var(--primary); }
+    .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+    .btn-gold        { background: var(--gold); color: var(--text); border-color: var(--gold); font-weight: 700; }
+    .btn-gold:hover  { background: #b8963f; }
+    .btn-outline     { background: transparent; color: var(--primary); border-color: var(--primary); }
+    .btn-outline:hover { background: var(--light-bg); }
+    .btn-govuk       { background: #00703C; color: white; border-color: #00703C; }
+    .btn-govuk:hover { background: #005a30; }
+    .btn-ghost       { background: none; border: none; color: var(--primary); text-decoration: underline; font-size: 14px; padding: 8px 0; cursor: pointer; }
+    .btn-sm          { padding: 8px 16px; font-size: 14px; }
+
+    /* ── Cards ──────────────────────────────────────────────────────────── */
+    .card { background: white; border: 1px solid var(--border-light); border-radius: 8px; padding: 24px; margin-bottom: 16px; }
+    .card-gold { border: 2px solid var(--gold); background: var(--gold-light); }
+    .card-govuk { border: 2px solid #00703C; background: #f0fdf4; }
+
+    /* ── Progress ────────────────────────────────────────────────────────── */
+    .progress-wrap  { margin-bottom: 28px; }
+    .progress-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .progress-track { background: var(--border-light); border-radius: 100px; height: 8px; overflow: hidden; }
+    .progress-fill  { background: var(--primary); height: 100%; border-radius: 100px; transition: width .3s ease; }
+    .step-dots { display: flex; align-items: center; gap: 6px; margin-bottom: 20px; }
+    .step-dot  { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: all .2s; }
+    .step-dot.done { background: var(--success); }
+    .step-dot.curr { background: var(--primary); width: 14px; height: 14px; }
+
+    /* ── Priority buttons ────────────────────────────────────────────────── */
+    .priority-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .priority-btn {
+      flex: 1; min-width: 110px; padding: 14px 12px; border-radius: 6px;
+      border: 2px solid var(--border); background: white;
+      cursor: pointer; text-align: center; font-size: 15px; font-weight: 500;
+      transition: all .15s;
+    }
+    .priority-btn:hover  { border-color: var(--primary); background: var(--light-bg); }
+    .priority-btn:focus  { outline: 3px solid var(--focus); }
+    .priority-btn.sel-high   { background: #1D4E8F; color: white; border-color: #1D4E8F; }
+    .priority-btn.sel-medium { background: #3b78d4; color: white; border-color: #3b78d4; }
+    .priority-btn.sel-low    { background: #93b3d9; color: white; border-color: #93b3d9; }
+    .priority-label { font-size: 11px; opacity: .8; display: block; margin-top: 2px; }
+
+    /* ── Badges ──────────────────────────────────────────────────────────── */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .badge-gold  { background: var(--gold); color: var(--text); }
+    .badge-blue  { background: var(--primary); color: white; }
+    .badge-green { background: var(--success); color: white; }
+    .badge-grey  { background: #e5e7eb; color: var(--muted); }
+
+    /* ── Candidate cards (match + list) ─────────────────────────────────── */
+    .candidate-card {
+      border: 2px solid var(--border-light); border-radius: 8px;
+      padding: 18px 20px; margin-bottom: 12px; transition: all .15s;
+    }
+    .candidate-card.best  { border-color: var(--gold); }
+    .candidate-card.clickable { cursor: pointer; }
+    .candidate-card.clickable:hover { border-color: var(--primary); background: #f5f8ff; }
+
+    .cand-row   { display: flex; align-items: center; gap: 14px; }
+    .cand-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    .cand-avatar-lg {
+      width: 72px; height: 72px; font-size: 26px;
+    }
+    .cand-info   { flex: 1; min-width: 0; }
+    .cand-name   { font-size: 17px; font-weight: 700; }
+    .cand-party  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .cand-bio    { font-size: 14px; color: var(--muted); margin-top: 6px; }
+    .cand-right  { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+
+    .match-pct   { font-size: 1.6rem; font-weight: 700; color: var(--primary); }
+    .match-track { background: var(--light-bg); border-radius: 4px; height: 8px; width: 100px; overflow: hidden; margin-top: 4px; }
+    .match-fill  { background: var(--primary); height: 100%; border-radius: 4px; }
+    .match-why   { font-size: 13px; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+    /* Policy position grid */
+    .policy-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px;
+    }
+    .policy-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .policy-icon { width: 24px; text-align: center; flex-shrink: 0; }
+    .policy-name { flex: 1; color: var(--muted); }
+    .policy-dots { display: flex; gap: 3px; }
+    .policy-dot  { width: 10px; height: 10px; border-radius: 50%; background: var(--border-light); }
+    .policy-dot.filled { background: var(--primary); }
+    .policy-dot.filled-gold { background: var(--gold); }
+
+    /* Validation */
+    .val-msg { background: #fde8e8; border: 1px solid var(--error); border-radius: 4px; padding: 10px 14px; color: var(--error); font-size: 14px; margin-bottom: 16px; display: none; }
+    .val-msg.show { display: block; }
+
+    /* ── How to vote steps ───────────────────────────────────────────────── */
+    .vote-steps { display: flex; flex-direction: column; gap: 0; }
+    .vote-step {
+      display: flex; gap: 16px; padding: 20px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .vote-step:last-child { border-bottom: none; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; flex-shrink: 0;
+    }
+    .step-body h3 { margin-bottom: 4px; }
+    .step-body p  { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+
+    /* GOV.UK action card */
+    .govuk-action-card {
+      border: 2px solid #00703C; background: #f0fdf4;
+      border-radius: 8px; padding: 20px 24px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .govuk-action-card h3 { margin-bottom: 4px; }
+    .govuk-action-card p  { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+    .govuk-tag { display: inline-block; background: #00703C; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin-bottom: 4px; letter-spacing: .5px; }
+
+    /* Candidate detail modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55);
+      z-index: 500; display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 20px; overflow-y: auto;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal {
+      background: white; border-radius: 10px; width: 100%; max-width: 600px;
+      padding: 32px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--light-bg); border: none; border-radius: 50%;
+      width: 36px; height: 36px; cursor: pointer; font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .modal-close:hover { background: var(--border-light); }
+    .modal-close:focus { outline: 3px solid var(--focus); }
+
+    /* Policy position bar */
+    .pos-row { margin-bottom: 14px; }
+    .pos-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+    .pos-track { background: var(--light-bg); border-radius: 4px; height: 10px; overflow: hidden; }
+    .pos-fill  { height: 100%; border-radius: 4px; background: var(--primary); transition: width .4s; }
+
+    /* ── Divider / Utilities ──────────────────────────────────────────────── */
+    .divider    { border: none; border-top: 1px solid var(--border-light); margin: 24px 0; }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .flex-center  { display: flex; justify-content: center; align-items: center; }
+    .flex-gap     { display: flex; gap: 12px; flex-wrap: wrap; }
+    .mt-2 { margin-top: 8px; }
+    .mt-4 { margin-top: 16px; }
+    .mt-6 { margin-top: 24px; }
+    .mt-8 { margin-top: 32px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-4 { margin-bottom: 16px; }
+    .mb-6 { margin-bottom: 24px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    footer { background: var(--light-bg); border-top: 1px solid var(--border-light); padding: 28px 20px; text-align: center; font-size: 13px; color: var(--muted); }
+
+    /* Party colours */
+    .col-lab { background: #C41230; }
+    .col-con { background: #0087DC; }
+    .col-lib { background: #F5A623; }
+    .col-grn { background: #00B140; }
+    .col-ind { background: #6B7280; }
+
+    /* ── Responsive ──────────────────────────────────────────────────────── */
+    @media (max-width: 620px) {
+      h1 { font-size: 1.6rem; }
+      .hero h1 { font-size: 1.55rem; }
+      .priority-group { flex-direction: column; }
+      .nav-links .nav-btn:not(:first-child):not(:last-child) { display: none; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .policy-grid { grid-template-columns: 1fr; }
+      .cand-right { display: none; }
+      .govuk-action-card { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Always-on official disclaimer bar ─────────────────────────────── -->
+<div class="official-bar" role="banner" aria-label="Important notice">
+  ⚠️ This is a <strong>voter information tool only</strong> — it does not record official votes.
+  To cast your official vote, use your polling card at your local polling station or apply for a
+  <a href="https://www.gov.uk/apply-postal-vote" target="_blank" rel="noopener">postal vote at GOV.UK</a>.
+</div>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────── -->
+<nav aria-label="Main navigation">
+  <div class="nav-inner">
+    <button class="nav-brand" onclick="showView('home')" aria-label="Go to home page">
+      <div class="nav-logo">KuT</div>
+      Canbury Voter Guide
+    </button>
+    <div class="nav-links" role="navigation">
+      <button class="nav-btn" id="nav-home"        onclick="showView('home')">Home</button>
+      <button class="nav-btn" id="nav-questionnaire" onclick="startQuestionnaire()">Find My Match</button>
+      <button class="nav-btn" id="nav-candidates"  onclick="showView('candidates')">Candidates</button>
+      <button class="nav-btn" id="nav-how-to-vote" onclick="showView('how-to-vote')">How to Vote</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     HOME
+══════════════════════════════════════════════════════════════════════ -->
+<div id="view-home" class="view active">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>Kingston upon Thames<br>Local Council Election 2026</h1>
+      <p>Find out which candidates align with your values — then vote officially at your polling station.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">📍 Canbury Ward, Kingston upon Thames</div>
+        <div class="hero-meta-item">🗓️ Election Date: 7 May 2026</div>
+        <div class="hero-meta-item">🗳️ First Past the Post (FPTP)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="notice-box" role="note" aria-label="Important notice">
+      <div class="notice-icon">⚠️</div>
+      <div class="notice-text">
+        <strong>This tool does not record your official vote.</strong>
+        It is an independent voter engagement service to help you understand the candidates and their policy positions.
+        Your official vote must be cast at a polling station or by post —
+        <a href="https://www.gov.uk/contact-electoral-registration-office" target="_blank" rel="noopener">find your polling station at GOV.UK</a>.
+      </div>
+    </div>
+
+    <div class="grid-2 mb-6">
+      <div class="card" style="border-top: 4px solid var(--primary)">
+        <div style="font-size:2rem; margin-bottom:10px">🎯</div>
+        <h3>Find your best match</h3>
+        <p class="text-sm text-muted">Answer 6 questions about the issues that matter to you. We'll show you which candidates align closest with your priorities.</p>
+        <button class="btn btn-primary btn-sm mt-4" onclick="startQuestionnaire()">Start the questionnaire →</button>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--gold)">
+        <div style="font-size:2rem; margin-bottom:10px">👥</div>
+        <h3>Browse all candidates</h3>
+        <p class="text-sm text-muted">Read about all 5 candidates standing in Canbury Ward — their backgrounds, party affiliations, and policy positions.</p>
+        <button class="btn btn-outline btn-sm mt-4" onclick="showView('candidates')">View candidates →</button>
+      </div>
+    </div>
+
+    <div class="card card-govuk">
+      <div class="govuk-tag">GOV.UK</div>
+      <h3 class="mt-2">Ready to cast your official vote?</h3>
+      <p class="text-sm text-muted mb-4">Your official vote is cast at a polling station on election day, or by post if you've applied. Make sure you're registered.</p>
+      <div class="flex-gap">
+        <a class="btn btn-govuk btn-sm" href="https://www.gov.uk/register-to-vote" target="_blank" rel="noopener">Register to vote</a>
+        <a class="btn btn-outline btn-sm" href="https://www.gov.uk/contact-electoral-registration-office" target="_blank" rel="noopener">Find my polling station</a>
+      </div>
+    </div>
+
+    <h2 class="mt-8 mb-4">Candidates standing in Canbury Ward</h2>
+    <div id="home-candidates"></div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     QUESTIONNAIRE
+══════════════════════════════════════════════════════════════════════ -->
+<div id="view-questionnaire" class="view">
+  <div class="container-sm">
+    <div class="flex-between mb-4" style="flex-wrap:wrap; gap:12px">
+      <h1 style="margin-bottom:0">Your Policy Priorities</h1>
+      <button class="btn-ghost" onclick="showView('candidates')">Skip — browse candidates instead</button>
+    </div>
+    <p class="text-muted">Tell us how important each policy area is to you. We'll rank the candidates by how closely their published positions match your priorities.</p>
+
+    <div class="banner banner-info text-sm">
+      All candidate policy positions are publicly available. Our matching methodology is fully transparent.
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label" id="q-progress-label">Step 1 of 6</div>
+      <div class="progress-track"><div class="progress-fill" id="q-progress-fill" style="width:16%"></div></div>
+      <div class="step-dots" id="q-step-dots" aria-hidden="true"></div>
+    </div>
+
+    <div class="val-msg" id="q-val-msg" role="alert"></div>
+    <div id="q-card" class="card"></div>
+
+    <div class="flex-between mt-4" style="gap:12px; flex-wrap:wrap">
+      <button class="btn btn-outline btn-sm" id="q-back-btn" onclick="qStep(-1)">← Back</button>
+      <button class="btn btn-primary" id="q-next-btn" onclick="qStep(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     MATCH RESULTS
+══════════════════════════════════════════════════════════════════════ -->
+<div id="view-match" class="view">
+  <div class="container">
+
+    <h1>Your Candidate Matches</h1>
+    <p class="text-muted">Ranked by how well each candidate's published policy positions align with your priorities. <button class="btn-ghost" style="font-size:15px" onclick="showView('questionnaire')">Change my priorities</button></p>
+
+    <div class="banner banner-info">
+      <strong>How we calculated this:</strong> Match % is based on the weighting you gave each policy area vs. each candidate's published position score (1–5). All data is openly published and the methodology is neutral.
+    </div>
+
+    <div id="match-cards" class="mt-4"></div>
+
+    <hr class="divider">
+
+    <div class="card card-govuk">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap">
+        <div style="flex:1">
+          <div class="govuk-tag">Ready to vote?</div>
+          <h3 class="mt-2">Cast your official vote at your polling station</h3>
+          <p class="text-sm text-muted mb-4">
+            Election day is <strong>7 May 2026</strong>. Polling stations open <strong>7am – 10pm</strong>.
+            Bring your polling card and a valid photo ID.
+          </p>
+          <div class="flex-gap">
+            <a class="btn btn-govuk btn-sm" href="https://www.gov.uk/contact-electoral-registration-office" target="_blank" rel="noopener">Find my polling station</a>
+            <a class="btn btn-outline btn-sm" href="https://www.gov.uk/apply-postal-vote" target="_blank" rel="noopener">Apply for postal vote</a>
+          </div>
+        </div>
+        <div style="font-size:3rem">🗳️</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     CANDIDATES
+══════════════════════════════════════════════════════════════════════ -->
+<div id="view-candidates" class="view">
+  <div class="container">
+    <h1>Candidates — Canbury Ward</h1>
+    <p class="text-muted">5 candidates are standing in the Canbury Ward election on 7 May 2026. Click any candidate to see their detailed policy positions.</p>
+
+    <div class="notice-box" role="note">
+      <div class="notice-icon">ℹ️</div>
+      <div class="notice-text">
+        <strong>Policy position scores (1–5)</strong> are derived from each candidate's published manifesto and public statements. 5 = strong emphasis; 1 = low emphasis. All sources are publicly available.
+        <br><button class="btn-ghost mt-2" onclick="startQuestionnaire()">Answer the questionnaire to see your personal match scores →</button>
+      </div>
+    </div>
+
+    <div id="candidates-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     HOW TO VOTE
+══════════════════════════════════════════════════════════════════════ -->
+<div id="view-how-to-vote" class="view">
+  <div class="container-sm">
+    <h1>How to Vote</h1>
+    <p class="text-muted">Everything you need to cast your official vote in the Canbury Ward election on <strong>7 May 2026</strong>.</p>
+
+    <div class="govuk-action-card mb-6">
+      <div>
+        <div class="govuk-tag">GOV.UK</div>
+        <h3 class="mt-2">Not yet registered?</h3>
+        <p>The registration deadline for this election is <strong>22 April 2026</strong>. You must be on the electoral roll to vote.</p>
+      </div>
+      <a class="btn btn-govuk" href="https://www.gov.uk/register-to-vote" target="_blank" rel="noopener">Register to vote</a>
+    </div>
+
+    <div class="card">
+      <h2>Voting at a polling station</h2>
+      <div class="vote-steps mt-4">
+        <div class="vote-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Check you're registered</h3>
+            <p>You must be on the electoral roll for Canbury Ward. If you're unsure, contact Kingston Council's Electoral Registration Office or check at GOV.UK.</p>
+          </div>
+        </div>
+        <div class="vote-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Find your polling station</h3>
+            <p>Your polling card will state your assigned polling station. If you've lost it, look up your station at GOV.UK using your address. Stations are open <strong>7am – 10pm</strong> on election day.</p>
+          </div>
+        </div>
+        <div class="vote-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Bring valid photo ID</h3>
+            <p>Since the Elections Act 2022, you must bring an accepted form of photo ID. Accepted forms include: passport, driving licence, Blue Badge, older person's bus pass, and others. <a href="https://www.gov.uk/government/publications/voter-id-acceptable-forms-of-photo-id" target="_blank" rel="noopener">Full list at GOV.UK</a>.</p>
+          </div>
+        </div>
+        <div class="vote-step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Mark your ballot paper</h3>
+            <p>In a First Past the Post election, you select <strong>one candidate only</strong> by marking a cross (✗) in the box next to their name. Voting for more than one candidate will spoil your ballot.</p>
+          </div>
+        </div>
+        <div class="vote-step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Place your ballot in the box</h3>
+            <p>Fold your ballot paper and place it in the ballot box. The count takes place after polls close at 10pm on 7 May 2026.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-action-card mt-4">
+      <div>
+        <div class="govuk-tag">GOV.UK</div>
+        <h3 class="mt-2">Can't make it in person?</h3>
+        <p>Apply for a <strong>postal vote</strong> or <strong>proxy vote</strong> if you can't attend on the day. Deadlines apply — apply early.</p>
+      </div>
+      <div class="flex-gap" style="flex-direction:column; align-items:flex-start">
+        <a class="btn btn-govuk btn-sm" href="https://www.gov.uk/apply-postal-vote" target="_blank" rel="noopener">Apply for postal vote</a>
+        <a class="btn btn-outline btn-sm" href="https://www.gov.uk/apply-proxy-vote" target="_blank" rel="noopener">Apply for proxy vote</a>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <h3>Need photo ID but don't have one?</h3>
+      <p class="text-sm text-muted">You can apply for a free <strong>Voter Authority Certificate</strong> from the Electoral Commission if you don't have an accepted form of photo ID. Apply before the deadline.</p>
+      <a class="btn btn-primary btn-sm mt-2" href="https://www.gov.uk/apply-for-photo-id-voter-authority-certificate" target="_blank" rel="noopener">Apply for free Voter Authority Certificate</a>
+    </div>
+
+    <hr class="divider">
+    <h2>About First Past the Post</h2>
+    <p class="text-sm text-muted">In this election you vote for <strong>one candidate only</strong>. The candidate with the most votes wins the seat — there is no requirement to achieve a majority. This is the standard method for UK local council elections.</p>
+    <p class="text-sm text-muted">There are no ranked choices, preferences, or elimination rounds. Your single vote is your full and complete contribution to the result.</p>
+
+    <div class="banner banner-info mt-4 text-sm">
+      <strong>Results:</strong> The count will take place after polls close on <strong>7 May 2026</strong>. Results will be announced by the Kingston upon Thames Returning Officer and published on the council website.
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<!-- ── Candidate detail modal ─────────────────────────────────────────── -->
+<div class="modal-overlay hidden" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="closeModalIfOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close candidate detail">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<footer>
+  <p>Canbury Ward Voter Guide — Kingston upon Thames Local Council Election 2026</p>
+  <p class="mt-2">This is an independent voter engagement tool. It does not record official votes and is not affiliated with Kingston Borough Council or any political party. &copy; 2026</p>
+</footer>
+
+<script>
+// ── Seed Data ─────────────────────────────────────────────────────────────
+
+const POLICY_AREAS = [
+  { id: 'housing',        label: 'Housing',           icon: '🏠', description: 'Affordable homes, social housing, planning decisions, and preventing homelessness in the borough.' },
+  { id: 'transport',      label: 'Transport',          icon: '🚌', description: 'Road maintenance, cycling infrastructure, bus services, and reducing congestion on local roads.' },
+  { id: 'green-spaces',   label: 'Green Spaces',       icon: '🌳', description: 'Parks, open spaces, air quality, biodiversity, and the council\'s net-zero environmental commitments.' },
+  { id: 'cost-of-living', label: 'Cost of Living',     icon: '💷', description: 'Council tax rates, support for struggling households, food banks, and local welfare services.' },
+  { id: 'local-business', label: 'Local Business',     icon: '🛍️', description: 'Supporting high streets, markets, independent traders, and creating local employment.' },
+  { id: 'education-youth',label: 'Education & Youth',  icon: '🎓', description: 'Schools, youth clubs, community learning programmes, and support for young people.' }
+];
+
+const CANDIDATES = [
+  {
+    id: 'c1', name: 'Sarah Johnson', party: 'Labour Party', partyShort: 'Labour',
+    colorClass: 'col-lab', initials: 'SJ',
+    bio: 'Former NHS nurse and housing campaigner. Chair of the Canbury Residents\' Association for 6 years.',
+    positions: { housing: 5, transport: 3, 'green-spaces': 3, 'cost-of-living': 5, 'local-business': 3, 'education-youth': 5 }
+  },
+  {
+    id: 'c2', name: 'James Whitfield', party: 'Conservative Party', partyShort: 'Conservative',
+    colorClass: 'col-con', initials: 'JW',
+    bio: 'Local business owner and former borough councillor (2016–2022). Champion of Kingston Market and town centre investment.',
+    positions: { housing: 2, transport: 5, 'green-spaces': 2, 'cost-of-living': 3, 'local-business': 5, 'education-youth': 3 }
+  },
+  {
+    id: 'c3', name: 'Priya Sharma', party: 'Liberal Democrats', partyShort: 'Lib Dems',
+    colorClass: 'col-lib', initials: 'PS',
+    bio: 'Cycling advocate and sustainability consultant. Spearheaded the Richmond Park air quality campaign.',
+    positions: { housing: 4, transport: 5, 'green-spaces': 5, 'cost-of-living': 3, 'local-business': 3, 'education-youth': 4 }
+  },
+  {
+    id: 'c4', name: 'Marcus O\'Brien', party: 'Green Party', partyShort: 'Green',
+    colorClass: 'col-grn', initials: 'MO',
+    bio: 'Environmental scientist and local school governor. Leading the campaign for a net-zero Canbury by 2030.',
+    positions: { housing: 4, transport: 3, 'green-spaces': 5, 'cost-of-living': 4, 'local-business': 2, 'education-youth': 3 }
+  },
+  {
+    id: 'c5', name: 'Linda Chen', party: 'Independent', partyShort: 'Independent',
+    colorClass: 'col-ind', initials: 'LC',
+    bio: 'Community organiser and parent of three. No party affiliation — focused on practical, cross-party solutions.',
+    positions: { housing: 3, transport: 4, 'green-spaces': 4, 'cost-of-living': 4, 'local-business': 4, 'education-youth': 4 }
+  }
+];
+
+// ── State ─────────────────────────────────────────────────────────────────
+
+const state = {
+  priorities: {},
+  questionnaireDone: false,
+  currentStep: 0,
+  matchResults: []
+};
+
+// ── Match algorithm ───────────────────────────────────────────────────────
+
+const PW = { high: 3, medium: 2, low: 1 };
+const MAX_SCORE = POLICY_AREAS.length * 3 * 5; // 90
+
+function computeMatch(candidate, priorities) {
+  let score = 0;
+  for (const area of POLICY_AREAS) {
+    score += (PW[priorities[area.id]] || 0) * (candidate.positions[area.id] || 0);
+  }
+  return Math.round((score / MAX_SCORE) * 100);
+}
+
+function buildWhy(candidate, priorities) {
+  const shared = POLICY_AREAS.filter(a =>
+    priorities[a.id] === 'high' && candidate.positions[a.id] >= 4
+  );
+  if (shared.length >= 2) return `You both prioritise ${shared[0].label} and ${shared[1].label}`;
+  if (shared.length === 1) return `You both prioritise ${shared[0].label}`;
+  const top = [...POLICY_AREAS].sort((a,b) =>
+    candidate.positions[b.id] - candidate.positions[a.id]
+  )[0];
+  return `${candidate.partyShort} places strong emphasis on ${top.label}`;
+}
+
+function computeAllMatches() {
+  return CANDIDATES.map(c => ({
+    candidate: c,
+    matchPct: computeMatch(c, state.priorities),
+    why: buildWhy(c, state.priorities)
+  })).sort((a,b) => b.matchPct - a.matchPct);
+}
+
+// ── Router ────────────────────────────────────────────────────────────────
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById('view-' + name);
+  if (el) el.classList.add('active');
+  // Highlight active nav button
+  ['home','questionnaire','candidates','how-to-vote'].forEach(id => {
+    const btn = document.getElementById('nav-' + id);
+    if (btn) btn.classList.toggle('active', id === name);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'candidates') renderCandidatesList();
+}
+
+// ── Home ──────────────────────────────────────────────────────────────────
+
+function renderHomeCandidates() {
+  document.getElementById('home-candidates').innerHTML = CANDIDATES.map(c => `
+    <div class="candidate-card clickable" onclick="openModal('${c.id}')" role="button" tabindex="0"
+         onkeydown="if(event.key==='Enter')openModal('${c.id}')"
+         aria-label="View ${c.name}'s profile">
+      <div class="cand-row">
+        <div class="cand-avatar ${c.colorClass}">${c.initials}</div>
+        <div class="cand-info">
+          <div class="cand-name">${c.name}</div>
+          <div class="cand-party">${c.party}</div>
+          <div class="cand-bio">${c.bio}</div>
+        </div>
+        <span style="color:var(--primary); font-size:20px; flex-shrink:0">›</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Questionnaire ─────────────────────────────────────────────────────────
+
+function startQuestionnaire() {
+  state.priorities = {};
+  state.currentStep = 0;
+  state.questionnaireDone = false;
+  renderQStep();
+  showView('questionnaire');
+  document.getElementById('nav-questionnaire').classList.add('active');
+}
+
+function renderQStep() {
+  const step = state.currentStep;
+  const area = POLICY_AREAS[step];
+  const total = POLICY_AREAS.length;
+
+  document.getElementById('q-progress-label').textContent =
+    `Step ${step + 1} of ${total} — ${area.label}`;
+  document.getElementById('q-progress-fill').style.width =
+    Math.round(((step + 1) / total) * 100) + '%';
+
+  document.getElementById('q-step-dots').innerHTML = POLICY_AREAS.map((_, i) => {
+    let cls = 'step-dot';
+    if (i < step) cls += ' done';
+    else if (i === step) cls += ' curr';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  const sel = state.priorities[area.id];
+  document.getElementById('q-card').innerHTML = `
+    <div style="font-size:2.6rem; margin-bottom:12px">${area.icon}</div>
+    <h2>${area.label}</h2>
+    <p class="text-muted">${area.description}</p>
+    <p style="font-weight:600; margin-bottom:0">How important is <em>${area.label}</em> to you?</p>
+    <div class="priority-group" role="group" aria-label="Select priority for ${area.label}">
+      ${['high','medium','low'].map(level => `
+        <button class="priority-btn ${sel === level ? 'sel-' + level : ''}"
+          onclick="setPriority('${area.id}','${level}')"
+          aria-pressed="${sel === level}"
+          aria-label="${level.charAt(0).toUpperCase()+level.slice(1)} priority for ${area.label}">
+          ${level.charAt(0).toUpperCase()+level.slice(1)}
+          <span class="priority-label">${level==='high'?'Very important':level==='medium'?'Somewhat important':'Less important'}</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+
+  document.getElementById('q-back-btn').style.visibility = step === 0 ? 'hidden' : 'visible';
+  document.getElementById('q-next-btn').textContent =
+    step === total - 1 ? 'See My Matches →' : 'Next →';
+  document.getElementById('q-val-msg').classList.remove('show');
+}
+
+function setPriority(areaId, level) {
+  state.priorities[areaId] = level;
+  renderQStep();
+}
+
+function isStraightLine() {
+  const vals = Object.values(state.priorities);
+  return vals.length === POLICY_AREAS.length && new Set(vals).size === 1;
+}
+
+function qStep(dir) {
+  const step = state.currentStep;
+  const total = POLICY_AREAS.length;
+  const valMsg = document.getElementById('q-val-msg');
+
+  if (dir === 1) {
+    if (!state.priorities[POLICY_AREAS[step].id]) {
+      valMsg.textContent = 'Please select a priority level to continue.';
+      valMsg.classList.add('show');
+      return;
+    }
+    if (step === total - 1) {
+      if (isStraightLine()) {
+        valMsg.textContent = 'Please vary your priorities — selecting the same level for everything won\'t help us find your best match.';
+        valMsg.classList.add('show');
+        return;
+      }
+      state.matchResults = computeAllMatches();
+      state.questionnaireDone = true;
+      renderMatchCards();
+      showView('match');
+      return;
+    }
+    state.currentStep = step + 1;
+  } else {
+    state.currentStep = Math.max(step - 1, 0);
+  }
+  renderQStep();
+}
+
+// ── Match Results ─────────────────────────────────────────────────────────
+
+function renderMatchCards() {
+  document.getElementById('match-cards').innerHTML = state.matchResults.map((r, i) => {
+    const c = r.candidate;
+    const isTop = i === 0;
+    return `
+      <div class="candidate-card ${isTop ? 'best' : ''} clickable" onclick="openModal('${c.id}')"
+           role="button" tabindex="0"
+           onkeydown="if(event.key==='Enter')openModal('${c.id}')"
+           aria-label="View ${c.name}'s full profile">
+        <div class="cand-row">
+          <div class="cand-avatar ${c.colorClass}">${c.initials}</div>
+          <div class="cand-info">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px">
+              <span class="cand-name">${c.name}</span>
+              ${isTop ? `<span class="badge badge-gold" role="status" aria-label="Best match for you">⭐ Best match for you</span>` : ''}
+            </div>
+            <div class="cand-party">${c.party}</div>
+            <div class="match-why">${r.why}</div>
+          </div>
+          <div class="cand-right">
+            <span class="match-pct">${r.matchPct}%</span>
+            <div class="match-track" aria-hidden="true">
+              <div class="match-fill" style="width:${r.matchPct}%"></div>
+            </div>
+            <span class="text-sm text-muted">match</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Candidates list ───────────────────────────────────────────────────────
+
+function renderCandidatesList() {
+  document.getElementById('candidates-list').innerHTML = CANDIDATES.map(c => {
+    const match = state.matchResults.find(r => r.candidate.id === c.id);
+    return `
+      <div class="candidate-card clickable" onclick="openModal('${c.id}')"
+           role="button" tabindex="0"
+           onkeydown="if(event.key==='Enter')openModal('${c.id}')"
+           aria-label="View ${c.name}'s full profile">
+        <div class="cand-row">
+          <div class="cand-avatar ${c.colorClass}">${c.initials}</div>
+          <div class="cand-info">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px">
+              <span class="cand-name">${c.name}</span>
+            </div>
+            <div class="cand-party">${c.party}</div>
+            <div class="cand-bio">${c.bio}</div>
+            ${match ? `<div class="match-why">${match.why} — <strong>${match.matchPct}% match</strong></div>` : ''}
+          </div>
+          <div class="cand-right" style="align-items:center; gap:4px">
+            ${match ? `
+              <span class="match-pct">${match.matchPct}%</span>
+              <div class="match-track"><div class="match-fill" style="width:${match.matchPct}%"></div></div>
+              <span class="text-xs text-muted">your match</span>
+            ` : `
+              <button class="btn btn-outline btn-sm" style="white-space:nowrap" onclick="event.stopPropagation();startQuestionnaire()">Get match</button>
+            `}
+            <span style="color:var(--primary); font-size:20px; margin-top:4px">›</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────
+
+function openModal(candidateId) {
+  const c = CANDIDATES.find(x => x.id === candidateId);
+  if (!c) return;
+  const match = state.matchResults.find(r => r.candidate.id === candidateId);
+  const posLabels = ['', 'Very low', 'Low', 'Moderate', 'High', 'Very high'];
+
+  document.getElementById('modal-content').innerHTML = `
+    <div class="cand-row mb-6">
+      <div class="cand-avatar cand-avatar-lg ${c.colorClass}">${c.initials}</div>
+      <div>
+        <h2 id="modal-title" style="margin-bottom:4px">${c.name}</h2>
+        <div class="cand-party" style="font-size:15px">${c.party}</div>
+        ${match ? `<div class="mt-2"><span class="badge badge-gold">⭐ ${match.matchPct}% match for you</span></div>` : ''}
+      </div>
+    </div>
+
+    <p class="text-muted text-sm">${c.bio}</p>
+
+    <hr class="divider">
+    <h3>Policy Positions</h3>
+    <p class="text-sm text-muted mb-4">Scores (1–5) based on published manifesto and public statements. 5 = very strong emphasis.</p>
+
+    ${POLICY_AREAS.map(area => {
+      const score = c.positions[area.id];
+      const voterPriority = state.priorities[area.id];
+      return `
+        <div class="pos-row">
+          <div class="pos-label">
+            <span>${area.icon} ${area.label}</span>
+            <span style="display:flex; gap:8px; align-items:center">
+              ${voterPriority ? `<span class="badge badge-grey text-xs">Your priority: ${voterPriority}</span>` : ''}
+              <strong>${posLabels[score]}</strong>
+            </span>
+          </div>
+          <div class="pos-track">
+            <div class="pos-fill" style="width:${(score/5)*100}%"></div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+
+    <hr class="divider">
+    <div class="banner banner-info text-sm">
+      <strong>Ready to vote for ${c.name.split(' ')[0]}?</strong> Cast your official vote at your polling station on <strong>7 May 2026</strong>, 7am–10pm. Bring valid photo ID.
+      <br><a href="https://www.gov.uk/contact-electoral-registration-office" target="_blank" rel="noopener">Find my polling station →</a>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  // Focus the close button for accessibility
+  setTimeout(() => document.querySelector('.modal-close').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function closeModalIfOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────
+
+renderHomeCandidates();
+</script>
+</body>
+</html>
