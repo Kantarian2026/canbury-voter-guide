@@ -408,7 +408,7 @@
   <div class="container-sm">
     <div class="flex-between mb-4" style="flex-wrap:wrap; gap:12px">
       <h1 style="margin-bottom:0">Your Policy Priorities</h1>
-      <button class="btn-ghost" onclick="showView('candidates')">Skip — browse candidates instead</button>
+      <button class="btn-ghost" onclick="skipQuestionnaire()">Skip — browse candidates instead</button>
     </div>
     <p class="text-muted">Tell us how important each policy area is to you. We'll rank the candidates by how closely their published positions match your priorities.</p>
 
@@ -647,6 +647,18 @@ const state = {
   matchResults: []
 };
 
+// ── Clarity event tracking ────────────────────────────────────────────────
+// Safe wrapper — queues events if Clarity hasn't fully loaded yet
+
+function trackEvent(name, data) {
+  try {
+    if (typeof clarity === 'function') {
+      clarity('event', name);
+      if (data) clarity('set', name, JSON.stringify(data));
+    }
+  } catch(e) {}
+}
+
 // ── Match algorithm ───────────────────────────────────────────────────────
 
 const PW = { high: 3, medium: 2, low: 1 };
@@ -693,6 +705,15 @@ function showView(name) {
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (name === 'candidates') renderCandidatesList();
+
+  // Track view events
+  const viewEvents = {
+    'home':         'home_viewed',
+    'candidates':   'candidates_viewed',
+    'match':        'match_results_viewed',
+    'how-to-vote':  'how_to_vote_viewed'
+  };
+  if (viewEvents[name]) trackEvent(viewEvents[name]);
 }
 
 // ── Home ──────────────────────────────────────────────────────────────────
@@ -724,6 +745,12 @@ function startQuestionnaire() {
   renderQStep();
   showView('questionnaire');
   document.getElementById('nav-questionnaire').classList.add('active');
+  trackEvent('questionnaire_started');
+}
+
+function skipQuestionnaire() {
+  trackEvent('questionnaire_skipped', { at_step: state.currentStep + 1 });
+  showView('candidates');
 }
 
 function renderQStep() {
@@ -770,6 +797,7 @@ function renderQStep() {
 
 function setPriority(areaId, level) {
   state.priorities[areaId] = level;
+  trackEvent('priority_selected', { area: areaId, level: level });
   renderQStep();
 }
 
@@ -793,15 +821,21 @@ function qStep(dir) {
       if (isStraightLine()) {
         valMsg.textContent = 'Please vary your priorities — selecting the same level for everything won\'t help us find your best match.';
         valMsg.classList.add('show');
+        trackEvent('questionnaire_straight_line_blocked');
         return;
       }
       state.matchResults = computeAllMatches();
       state.questionnaireDone = true;
+      trackEvent('questionnaire_completed', {
+        top_match: state.matchResults[0].candidate.name,
+        top_match_pct: state.matchResults[0].matchPct
+      });
       renderMatchCards();
       showView('match');
       return;
     }
     state.currentStep = step + 1;
+    trackEvent('questionnaire_step_' + (state.currentStep + 1));
   } else {
     state.currentStep = Math.max(step - 1, 0);
   }
@@ -884,6 +918,11 @@ function openModal(candidateId) {
   const c = CANDIDATES.find(x => x.id === candidateId);
   if (!c) return;
   const match = state.matchResults.find(r => r.candidate.id === candidateId);
+  trackEvent('candidate_profile_opened', {
+    candidate: c.name,
+    party: c.partyShort,
+    match_pct: match ? match.matchPct : null
+  });
   const posLabels = ['', 'Very low', 'Low', 'Moderate', 'High', 'Very high'];
 
   document.getElementById('modal-content').innerHTML = `
